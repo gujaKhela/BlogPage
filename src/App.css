@@ -1,5 +1,5 @@
-#root {
-  max-width: 1920px;
+#root#root#root {
+  max-width: 1920px !important;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
@@ -17,4 +17,3 @@
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
-

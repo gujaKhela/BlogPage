@@ -7,7 +7,11 @@ export default {
 
   ],
   theme: {
-    extend: {},
+    extend: {
+      screens: {
+        '2xl': '1920px',
+      },
+    },
   },
   plugins: [
     require('flowbite/plugin'),
