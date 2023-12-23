@@ -1,0 +1,118 @@
+1chemi shekitxva ...now i wont to load content from blogs/ to see blogs by get method when load site which need this bearer token. i also need to login when i click login button and check on server if user name and email is correct then login if not not. and finaly if i am loged in then i can to add blog like post methods when i needed to check if i am logedin. also when someone types something on my website after refresh site filed text must not lost and load automaticaly
+
+It looks like you want to implement a few features: loading content from `/blogs`, handling user login, checking if the user is logged in, and preserving form data after a page refresh. Let's break down the steps for each feature.
+
+### 1. Loading Content from `/blogs`
+
+To load content from `/blogs` with the bearer token, you can use the `fetch` function along with the token in the headers. Below is an example of how you can achieve this using the `useEffect` hook:
+
+```jsx
+import React, { useEffect, useState } from "react";
+import { useAuth } from "./contexts/AuthContext";
+
+function BlogComponent() {
+  const { token } = useAuth();
+  const [blogs, setBlogs] = useState([]);
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const response = await fetch("https://api.blog.redberryinternship.ge/api/blogs", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          // Handle error
+          console.error("Error fetching blogs:", response.statusText);
+          return;
+        }
+
+        const data = await response.json();
+        setBlogs(data.data);
+      } catch (error) {
+        console.error("Error fetching blogs:", error.message);
+      }
+    };
+
+    fetchBlogs();
+  }, [token]);
+
+  return (
+    <div>
+      <h2>Blog Content</h2>
+      <ul>
+        {blogs.map((blog) => (
+          <li key={blog.id}>{blog.title}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default BlogComponent;
+```
+
+### 2. User Login
+
+For user login, you need to create a login form and handle the submission. You can use the `fetch` function to send a `POST` request to the `/login` endpoint with the user's credentials.
+
+### 3. Checking if the User is Logged In
+
+You can check if the user is logged in by verifying the presence of the token. If the token is present, the user is considered logged in.
+
+### 4. Preserving Form Data after Page Refresh
+
+To preserve form data after a page refresh, you can use browser storage mechanisms like `localStorage` or `sessionStorage` to store the form data. Retrieve the data from storage when the component mounts.
+
+Here's a simplified example using `localStorage`:
+
+```jsx
+import React, { useState, useEffect } from "react";
+
+function BlogForm() {
+  const [formData, setFormData] = useState({
+    title: "",
+    content: "",
+  });
+
+  useEffect(() => {
+    // Retrieve form data from localStorage on mount
+    const storedData = localStorage.getItem("blogFormData");
+    if (storedData) {
+      setFormData(JSON.parse(storedData));
+    }
+  }, []);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  const handleSubmit = () => {
+    // Save form data to localStorage
+    localStorage.setItem("blogFormData", JSON.stringify(formData));
+
+    // Perform other actions, e.g., submit form data to the server
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <label>
+        Title:
+        <input type="text" name="title" value={formData.title} onChange={handleChange} />
+      </label>
+      <label>
+        Content:
+        <textarea name="content" value={formData.content} onChange={handleChange} />
+      </label>
+      <button type="submit">Submit</button>
+    </form>
+  );
+}
+
+export default BlogForm;
+```
+
+These are general guidelines, and you might need to adapt them based on your specific requirements and how your application is structured.
