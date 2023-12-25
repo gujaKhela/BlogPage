@@ -1,5 +1,6 @@
 import Home from "../pages/Home";
 import Blog from "../pages/Blog";
+import AddBlog from "../pages/AddBlog";
 import { Routes, Route } from "react-router-dom";
 
 const AllRoutes = () => {
@@ -8,6 +9,7 @@ const AllRoutes = () => {
         <Routes>
         <Route path="/" element={<Home />} />
         <Routes path="/blog" element={<Blog />} />
+        <Routes path="/add_blog" element={<AddBlog />} />
 
             {/* <Route path="/" element={<MovieList apiPath="movie/now_playing" title= "Home" />} /> */}
             {/* <Route path="movie/:id" element={<MovieDetail />} /> */}
