@@ -1,7 +1,9 @@
 import React from "react";
 import { Card } from "flowbite-react";
 import { Link } from "react-router-dom";
+import { useMyArrayContext } from "../contexts/MyArrayContext"; 
 import { useQuery } from "react-query";
+
 
 const fetchData = async () => {
   try {
@@ -29,7 +31,9 @@ const fetchData = async () => {
 };
 
 const CustomCard = ({ isHomePageLookLike = false, isBlogPage = false }) => {
-  // Use the useQuery hook to fetch blogs
+  const { myArray } = useMyArrayContext();
+  console.log(myArray);
+
   const { data: blogs, error, isLoading } = useQuery(["blogs"], fetchData);
 
   if (isLoading) {
@@ -40,14 +44,22 @@ const CustomCard = ({ isHomePageLookLike = false, isBlogPage = false }) => {
     return <div>Error fetching blogs: {error.message}</div>;
   }
 
+  const filteredBlogs =
+    myArray.length > 0
+      ? blogs.filter((blog) =>
+          blog.categories.some((category) => myArray.includes(category.id))
+        )
+      : blogs;
+
   const cardClassName = isHomePageLookLike
-    ? "max-w-md flex-shrink-0" // Adjusted max width
+    ? "max-w-md flex-shrink-0"
     : "w-5/6 mx-auto my-10";
+
 
   return (
     <>
-      {blogs.length > 0 &&
-        blogs.map((blog) => (
+      {filteredBlogs.length > 0 &&
+        filteredBlogs.map((blog) => (
           <div key={blog.id} className="card-container">
             <Card className={cardClassName}>
               <img
