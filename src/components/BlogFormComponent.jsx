@@ -1,240 +1,292 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const BlogForm = () => {
-  const [error, setError] = useState(null);
-  const [blogs, setBlogs] = useState([]);
+  const initialFormData = {
+    title: "",
+    description: "",
+    image: null,
+    author: "",
+    publish_date: "",
+    selectedCategories: [],
+    email: "",
+  };
+
+  const [categories, setCategories] = useState([]);
+  const [allCategories, setAllCategories] = useState([]); // Store all categories separately
+  const [selectedCategories, setSelectedCategories] = useState([]);
+
+  const [isCategoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
+
+  const [formData, setFormData] = useState(initialFormData);
+  const [validationErrors, setValidationErrors] = useState({});
 
   useEffect(() => {
-    // Fetch blogs when the component mounts
-    fetchBlogs();
-  }, []); // Empty dependency array to run the effect only once
-
-  const fetchBlogs = async () => {
-    try {
-      const response = await fetch(
-        "https://api.blog.redberryinternship.ge/api/blogs",
-        {
-          headers: {
-            Authorization: `Bearer 88b0b15f33b1af2de3f0db42bfb56239f34b68634815ea6f7b77673968a00730`,
-          },
-        }
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log("Fetched Blogs:", data); // Add this line for logging
-        setBlogs(data.data);
-      } else {
-        console.error(
-          "Failed to fetch blogs. Response status:",
-          response.status
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(
+          "https://api.blog.redberryinternship.ge/api/categories"
         );
-        setError("Failed to fetch blogs. Please try again.");
-      }
-    } catch (error) {
-      console.error("Blog fetch error:", error);
-      setError("Failed to fetch blogs. Please try again.");
-    }
-  };
 
-  const handleAddBlog = async (blogData) => {
-    try {
-      const response = await fetch(
-        "https://api.blog.redberryinternship.ge/api/blogs",
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer 06c849e6edaa8a40645ce20d6918e3815b03cffe83472ce974b896837bc18b1e`,
-            accept: "application/json",
-            "Content-Type": "multipart/form-data",
-          },
+        if (!response.data || !Array.isArray(response.data.data)) {
+          console.error(
+            "Invalid response format for categories:",
+            response.data
+          );
+          return;
         }
-      );
 
-      // Log the entire response
-      console.log("Full Response:", response);
-
-      if (response.ok) {
-        // If the blog is created successfully, fetch the updated list of blogs
-        fetchBlogs();
-      } else if (response.status === 204) {
-        // Treat 204 as success, but no content
-        fetchBlogs();
-      } else {
-        setError("Failed to create a blog. Please try again.");
+        setAllCategories(response.data.data); // Save all categories
+        console.log("Categories from API:", response.data.data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
       }
-    } catch (error) {
-      console.error("Blog creation error:", error);
-      setError("Failed to create a blog. Please try again.");
+    };
+
+    fetchCategories();
+  }, []);
+  useEffect(() => {
+    const storedFormData = localStorage.getItem("blogFormData");
+    if (storedFormData) {
+      setFormData(JSON.parse(storedFormData));
     }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("blogFormData", JSON.stringify(formData));
+  }, [formData]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+    setValidationErrors((prevErrors) => ({ ...prevErrors, [name]: undefined }));
   };
 
-  const handleCreateBlog = async (e) => {
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setFormData((prevData) => ({ ...prevData, image: file }));
+  };
+
+  const validateForm = () => {
+    const errors = {};
+    // Validation rules (add your own rules)
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleCategoryChange = (e) => {
+    const selectedOptions = Array.from(e.target.selectedOptions).map(
+      (option) => option.value
+    );
+
+    // Filter out categories that are already selected
+    const newSelectedCategories = selectedOptions.filter(
+      (categoryId) => !formData.selectedCategories.includes(Number(categoryId))
+    );
+
+    // Update selected categories in form data
+    setFormData((prevData) => ({
+      ...prevData,
+      selectedCategories: [
+        ...prevData.selectedCategories,
+        ...newSelectedCategories.map(Number),
+      ],
+    }));
+
+    // Log selected categories for debugging
+    console.log("Selected Categories:", formData.selectedCategories);
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const formData = new FormData(e.target);
-    const blogData = {};
-    formData.forEach((value, key) => {
-      blogData[key] = value;
-    });
+    if (validateForm()) {
+      const formDataToSend = new FormData();
 
-    handleAddBlog(blogData);
+      // Append other form fields
+      Object.entries(formData).forEach(([key, value]) => {
+        formDataToSend.append(key, value);
+      });
+
+      // Append selectedCategories explicitly with the expected field name
+      formDataToSend.append(
+        "categories",
+        JSON.stringify(formData.selectedCategories)
+      );
+
+      // Log formData just before sending to the API
+      console.log("FormData before sending:", formData);
+
+      try {
+        const response = await axios.post(
+          "https://api.blog.redberryinternship.ge/api/blogs",
+          formDataToSend,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization:
+                "Bearer 9bf9e1d01445670513eb7efd8efd8a54ec810ae9a16c1dc96929f885aeeff00e",
+            },
+          }
+        );
+
+        console.log("API Response:", response.data);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    } else {
+      console.log("Form validation failed. Please check the errors.");
+    }
   };
 
   return (
-    <div>
-      <p className="font-bold	text-2xl"> ბლოგის დამატება </p>
-      <div className="mx-auto max-w-4xl mt-8">
-        <form onSubmit={handleCreateBlog}>
-          {/* Image Uploader */}
-          <div className="mb-8">
-            <label
-              htmlFor="image"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
-              Upload Image (PNG)
-            </label>
-            <input
-              type="file"
-              id="image"
-              name="image"
-              accept="image/png"
-              className="mt-2"
-            />
-          </div>
-
-          {/* Author and Name Side by Side */}
-          <div className="grid grid-cols-2 gap-x-6">
-            <div>
-              <label
-                htmlFor="author"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Author
-              </label>
+    <div className="mx-auto max-w-4xl mt-8">
+      <p className="font-bold text-2xl"> ბლოგის დამატება </p>
+      <form onSubmit={handleSubmit}>
+        <div className="mb-8">
+          <label>
+            Image:
+            <input type="file" name="image" onChange={handleImageChange} />
+          </label>
+        </div>
+        <div className="grid grid-cols-2 gap-x-6">
+          <div>
+            <label>
+              Author:
               <input
                 type="text"
-                id="author"
                 name="author"
-                autoComplete="author"
+                value={formData.author}
+                onChange={handleInputChange}
                 className="mt-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
-            </div>
-            <div>
-              <label
-                htmlFor="name"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Name
-              </label>
+            </label>
+          </div>
+          <div>
+            <label>
+              Title:
               <input
                 type="text"
-                id="name"
-                name="name"
-                autoComplete="name"
+                name="title"
+                value={formData.title}
+                onChange={handleInputChange}
                 className="mt-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
-            </div>
-          </div>
-
-          {/* Description */}
-          <div className="mt-8">
-            <label
-              htmlFor="blog-description"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
-              Blog Description
             </label>
+          </div>
+        </div>
+
+        {/* //aqedan kide  */}
+        <div className="mt-8">
+          <label>
+            Description:
             <textarea
-              id="blog-description"
-              name="blog-description"
-              rows="3"
+              type="text"
+              name="description"
+              value={formData.description}
+              onChange={handleInputChange}
               className="mt-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             ></textarea>
-          </div>
-
-          {/* Date and Category Side by Side */}
-          <div className="grid grid-cols-2 gap-x-6 mt-8">
-            <div>
-              <label
-                htmlFor="publish-date"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Publish Date
-              </label>
-              <input
-                type="date"
-                id="publish-date"
-                name="publish-date"
-                className="mt-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="category"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Category
-              </label>
-              <input
-                type="text"
-                id="category"
-                name="category"
-                autoComplete="category"
-                className="mt-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-            </div>
-          </div>
-
-          {/* Mail */}
-          <div className="mt-8">
-            <label
-              htmlFor="mail"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
-              Mail
-            </label>
-            <input
-              type="email"
-              id="mail"
-              name="mail"
-              autoComplete="email"
-              className="mt-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            />
-          </div>
-
-          {/* Submit Button */}
-          <div className="mt-8">
-            <button
-              type="submit"
-              className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:shadow-outline-indigo active:bg-indigo-800"
-            >
-              Submit
-            </button>
-          </div>
-        </form>
-
-        <div className="mt-8">
-          <h2 className="text-xl font-semibold mb-2">Your Blog Posts</h2>
-          <ul>
-            {blogs.map((blog) => (
-              <li key={blog.id}>
-                <p className="font-semibold text-lg">{blog.title}</p>
-                <p className="text-gray-600">Author: {blog.author}</p>
-                <p className="text-gray-600">
-                  Publish Date: {blog.publish_date}
-                </p>
-                <p className="text-gray-600">
-                  Category:{" "}
-                  {blog.categories.map((category) => category.name).join(", ")}
-                </p>
-                {/* Add more details as needed */}
-              </li>
-            ))}
-          </ul>
+          </label>
         </div>
-      </div>
-      {error && <p>{error}</p>}
+
+        {/* es xvaa */}
+
+        <div className="grid grid-cols-2 gap-x-6 mt-8">
+          <div>
+            <label>
+              Publish Date:
+              <input
+                className="mt-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                type="date"
+                name="publish_date"
+                value={formData.publish_date}
+                onChange={handleInputChange}
+              />
+            </label>
+          </div>
+
+          <div>
+            Categories:
+            <div className="relative">
+              <div
+                className="mt-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 cursor-pointer"
+                onClick={() => setCategoryDropdownOpen(!isCategoryDropdownOpen)}
+              >
+                {isCategoryDropdownOpen && (
+                  <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                    <svg
+                      className="h-5 w-5 text-gray-400"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      aria-hidden="true"
+                    >
+                      {/* ... (existing code) */}
+                    </svg>
+                  </div>
+                )}
+                {formData.selectedCategories.length > 0
+                  ? formData.selectedCategories.map((categoryId) => (
+                      <span
+                        key={categoryId} // Make sure categoryId is unique
+                        className="mr-2 inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700"
+                      >
+                        {categoryId}
+                      </span>
+                    ))
+                  : "Select Categories"}
+              </div>
+              {isCategoryDropdownOpen && (
+                <div className="absolute mt-1 w-full rounded-md bg-white shadow-lg">
+                  <select
+                    className="w-full p-2"
+                    name="selectedCategories"
+                    value={formData.selectedCategories}
+                    onChange={handleCategoryChange}
+                    multiple
+                  >
+                    {allCategories.map((category) => (
+                      <option
+                        key={category.id}
+                        value={category.id}
+                        style={{
+                          backgroundColor: category.background_color,
+                          color: category.text_color,
+                        }}
+                      >
+                        {category.title}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+        <br />
+        <div className="mt-8">
+          <label>
+            Email:
+            <input
+              className="mt-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              type="text"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+            />
+          </label>
+        </div>
+        <br />
+        <div className="mt-8">
+          <button
+            type="submit"
+            className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:shadow-outline-indigo active:bg-indigo-800"
+          >
+            Submit
+          </button>
+        </div>
+      </form>
     </div>
   );
 };
