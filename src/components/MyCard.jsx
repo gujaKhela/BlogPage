@@ -1,40 +1,31 @@
-import React from "react";
+// CustomCard.js
+
+import React, { useEffect } from "react";
 import { Card } from "flowbite-react";
 import { Link } from "react-router-dom";
-import { useMyArrayContext } from "../contexts/MyArrayContext"; 
+import { useMyArrayContext } from "../contexts/MyArrayContext";
 import { useQuery } from "react-query";
-
-
-const fetchData = async () => {
-  try {
-    const response = await fetch(
-      `https://api.blog.redberryinternship.ge/api/blogs`,
-      {
-        headers: {
-          Authorization:
-            "Bearer 9bf9e1d01445670513eb7efd8efd8a54ec810ae9a16c1dc96929f885aeeff00e",
-        },
-      }
-    );
-
-    if (!response.ok) {
-      console.error("Error fetching blogs:", response.statusText);
-      return [];
-    }
-
-    const data = await response.json();
-    return data.data;
-  } catch (error) {
-    console.error("Error fetching blogs:", error.message);
-    return [];
-  }
-};
+import { fetchData } from "../api/fetchData"; // Adjust the import statement
 
 const CustomCard = ({ isHomePageLookLike = false, isBlogPage = false }) => {
-  const { myArray } = useMyArrayContext();
-  console.log(myArray);
+  const { myArray, toggleElementInMyArray } = useMyArrayContext();
 
+  // Fetch blogs using react-query
   const { data: blogs, error, isLoading } = useQuery(["blogs"], fetchData);
+
+  // Load selected categories from local storage on mount
+  useEffect(() => {
+    const savedCategories = localStorage.getItem("selectedCategories");
+    if (savedCategories) {
+      const parsedCategories = JSON.parse(savedCategories);
+      parsedCategories.forEach((category) => toggleElementInMyArray(category));
+    }
+  }, []);
+
+  // Save selected categories to local storage whenever myArray changes
+  useEffect(() => {
+    localStorage.setItem("selectedCategories", JSON.stringify(myArray));
+  }, [myArray]); // Run only when myArray changes
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -44,6 +35,7 @@ const CustomCard = ({ isHomePageLookLike = false, isBlogPage = false }) => {
     return <div>Error fetching blogs: {error.message}</div>;
   }
 
+  // Filter blogs based on selected categories
   const filteredBlogs =
     myArray.length > 0
       ? blogs.filter((blog) =>
@@ -54,7 +46,6 @@ const CustomCard = ({ isHomePageLookLike = false, isBlogPage = false }) => {
   const cardClassName = isHomePageLookLike
     ? "max-w-md flex-shrink-0"
     : "w-5/6 mx-auto my-10";
-
 
   return (
     <>
