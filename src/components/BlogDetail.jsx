@@ -65,7 +65,7 @@ const BlogDetails = () => {
             {" "}
             {publish_date} | tempmail@redberry.ge
           </p>
-          <p className="text-2xl font-bold text-start mt-5 ">{title}</p>
+          <p className="text-2xl font-bold text-start my-5 ">{title}</p>
           <ul className="flex flex-wrap justify-center space-x-4 rounded">
 
             {categories.map((category) => (
@@ -90,6 +90,9 @@ const BlogDetails = () => {
           </div>
         </div>
       </div>
+
+
+  
     </>
   );
 };

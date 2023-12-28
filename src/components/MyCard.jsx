@@ -1,19 +1,12 @@
-// CustomCard.js
-
 import React, { useEffect } from "react";
-import trimTextToWords from "./TextTrim";
 import { Card } from "flowbite-react";
 import { Link } from "react-router-dom";
 import Arrow from "../img/Arrow.svg";
+import trimTextToWords from "./TextTrim"
 import { useMyArrayContext } from "../contexts/MyArrayContext";
-import { useQuery } from "react-query";
-import { fetchData } from "../api/fetchData"; // Adjust the import statement
 
-const CustomCard = ({ isHomePageLookLike = false, isBlogPage = false }) => {
+const CustomCard = ({ isHomePageLookLike = false, blogs,isBlogPage = false }) => {
   const { myArray, toggleElementInMyArray } = useMyArrayContext();
-
-  // Fetch blogs using react-query
-  const { data: blogs, error, isLoading } = useQuery(["blogs"], fetchData);
 
   // Load selected categories from local storage on mount
   useEffect(() => {
@@ -28,14 +21,6 @@ const CustomCard = ({ isHomePageLookLike = false, isBlogPage = false }) => {
   useEffect(() => {
     localStorage.setItem("selectedCategories", JSON.stringify(myArray));
   }, [myArray]); // Run only when myArray changes
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error fetching blogs: {error.message}</div>;
-  }
 
   // Filter blogs based on selected categories
   const filteredBlogs =

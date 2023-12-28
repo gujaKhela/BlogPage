@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import logoImage from "../img/LOGO.png";
+import ArrowBack from "../img/ArrowBack.png"
 import BlogForm from "../components/BlogFormComponent";
 
 const CreateBlogPage = () => {
@@ -14,6 +15,10 @@ const CreateBlogPage = () => {
       <div className="mt-16">
         <BlogForm />
       </div>
+
+      <Link to="/" className="back-arrow" style={{ position: "absolute", top: "120px", left: "76px" }}>
+        <img src={ArrowBack} alt="Back" />
+      </Link>
     </>
   );
 };
