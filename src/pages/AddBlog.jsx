@@ -1,11 +1,20 @@
-import React from 'react';
-import BlogForm from '../components/BlogFormComponent';
+import React from "react";
+import { Link } from "react-router-dom";
+import logoImage from "../img/LOGO.png";
+import BlogForm from "../components/BlogFormComponent";
 
 const CreateBlogPage = () => {
   return (
-    <div>
-      <BlogForm />
-    </div>
+    <>
+      <div className="h-[80px] border-2 rounded w-full absolute top-0 left-0 flex items-center justify-center">
+        <Link to="/">
+          <img src={logoImage} alt="Logo" className="" />
+        </Link>
+      </div>
+      <div className="mt-16">
+        <BlogForm />
+      </div>
+    </>
   );
 };
 

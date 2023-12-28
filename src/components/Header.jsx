@@ -35,14 +35,14 @@ const Header = ({ isBlogPage = false }) => {
             className="bg-indigo-600 text-white px-4 py-2 rounded"
             onClick={handleAddBlogClick}
           >
-            add Blog
+            დაამატე ბლოგი
           </button>
         ) : (
           <button
             className="bg-indigo-600 text-white px-4 py-2 rounded"
             onClick={openLoginModal}
           >
-            Login
+            შესვლა
           </button>
         )}
       </div>

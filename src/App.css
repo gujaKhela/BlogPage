@@ -92,3 +92,7 @@
   background-color: #0056b3;
 }
 
+
+.border-red-500 {
+  border-color: #ef4444; /* Adjust the color as needed */
+}

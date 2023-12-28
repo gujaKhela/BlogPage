@@ -1,8 +1,10 @@
 // CustomCard.js
 
 import React, { useEffect } from "react";
+import trimTextToWords from "./TextTrim";
 import { Card } from "flowbite-react";
 import { Link } from "react-router-dom";
+import Arrow from "../img/Arrow.svg";
 import { useMyArrayContext } from "../contexts/MyArrayContext";
 import { useQuery } from "react-query";
 import { fetchData } from "../api/fetchData"; // Adjust the import statement
@@ -44,8 +46,8 @@ const CustomCard = ({ isHomePageLookLike = false, isBlogPage = false }) => {
       : blogs;
 
   const cardClassName = isHomePageLookLike
-    ? "max-w-md flex-shrink-0"
-    : "w-5/6 mx-auto my-10";
+    ? "max-w-md flex-shrink-0 w-[408px] h-[620px]"
+    : "w-5/6 mx-auto my-10 w-[408px] h-[620px]";
 
   return (
     <>
@@ -59,16 +61,16 @@ const CustomCard = ({ isHomePageLookLike = false, isBlogPage = false }) => {
                 alt={blog.alt}
                 style={{ maxHeight: "200px" }} // Fixed height for the image
               />
-              <p className="text-left pl-4 text-xs mt-2 h-8 overflow-hidden">
+              <p className="text-[16px] leading-[20px] text-start">
                 {blog.author}
               </p>
-              <p className="date text-left pl-4 text-gray-500">
+              <p className="font-small text-[#85858D] text-start">
                 {isHomePageLookLike
                   ? `${blog.publish_date}`
                   : `Publication Date: ${blog.publish_date} ${"gmail@@@com"}`}
               </p>
               <h4 className="text-2xl font-bold tracking-tight text-gray-700 dark:text-white text-left h-16 overflow-hidden">
-                {blog.description}
+                {blog.title}
               </h4>
               <div className="flex justify-between pl-4 pr-4">
                 <ul className="flex flex-wrap justify-center space-x-4 mb-4">
@@ -86,15 +88,16 @@ const CustomCard = ({ isHomePageLookLike = false, isBlogPage = false }) => {
                   ))}
                 </ul>
               </div>
-              <p className="font-normal text-gray-700 dark:text-gray-400">
+              <p className="font-normal text-start text-gray-700 dark:text-gray-400">
                 {isHomePageLookLike
-                  ? "mokle agwera--mag Here are the biggest enterprise technology acquisitions of 2021 so"
+                  ? `${trimTextToWords(blog.description, 12)}`
                   : ""}
               </p>
               {isHomePageLookLike && (
-                <Link to="/full-description" className="button">
-                  სრულად ნახვა
-                </Link>
+  <Link to={`/blogs/${blog.id}`} className="text-[#5D37F3] flex items-center gap-2 text-[14px]">
+  სრულად ნახვა
+  <img src={Arrow} alt="Arrow" />
+</Link>
               )}
             </Card>
             {isBlogPage && (

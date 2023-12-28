@@ -15,8 +15,8 @@ function Home() {
             
       <Header />
       <Navbar />
-      <main className="flex flex-wrap  justify-center">
-        <CustomCard />
+      <main className="flex flex-wrap justify-center gap-8">
+        <CustomCard isHomePageLookLike={true}/>
       </main>
      
     </>

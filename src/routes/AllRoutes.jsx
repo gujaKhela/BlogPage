@@ -1,5 +1,5 @@
 import Home from "../pages/Home";
-import Blog from "../pages/Blog";
+import BlogDetailsPage from "../pages/BlogDetailsPage";
 import AddBlog from "../pages/AddBlog";
 import { Routes, Route } from "react-router-dom";
 
@@ -8,7 +8,7 @@ const AllRoutes = () => {
     <div className="">
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/blog" element={<Blog />} />
+        <Route path="/blogs/:id" element={<BlogDetailsPage />} />
         <Route path="/add_blog" element={<AddBlog />} />
       </Routes>
     </div>
