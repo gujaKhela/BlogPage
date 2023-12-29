@@ -88,3 +88,8 @@
 .arrow.next:hover {
   background-color: #5D37F3 ; /* Change to the color you want on hover */
 }
+
+.slider-container {
+  position: relative;
+  
+}

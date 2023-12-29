@@ -53,8 +53,8 @@ const YourSliderComponent = ({
     speed: 500,
     slidesToShow: 3, // Display three slides at a time
     slidesToScroll: 3, // Scroll three slides at a time
-    nextArrow: <SampleNextArrow style={{ position: "absolute", top: "10%", right: "5%" }} />,
- // Move next arrow to top right
+    nextArrow: <SampleNextArrow  />,
+    // Move next arrow to top right
     // prevArrow: <SamplePrevArrow />, // Custom prev arrow component
   };
 
@@ -66,7 +66,6 @@ const YourSliderComponent = ({
         <div key={blog.id}>
           {" "}
           <div className="card-container">
-            {/* Your card component goes here */}
 
             <div key={blog.id} className="card-container">
               <div className="my-12">
