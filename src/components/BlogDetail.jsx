@@ -1,26 +1,35 @@
 // BlogDetails.jsx
 import { useAuth } from "../contexts/AuthContext";
 import { Link } from "react-router-dom";
-import logoImage from "../img/LOGO.png"
+import logoImage from "../../src/img/LOGO.png";
+import blogImage from "../img/Blog.png"
+
 import React, { useEffect, useState } from "react";
-import Header from "./Header";
 import { useParams } from "react-router-dom";
 import { fetchData } from "../api/fetchData"; // Adjust the import path
 import SimilarComponents from "./SimilarComponents";
+import LoginModal from "./LoginModal";
+
 
 const BlogDetails = () => {
   const { id } = useParams();
   const [blogDetail, setBlogDetail] = useState(null);
   const { isLoggedIn, logout } = useAuth();
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
+
+
+  const openLoginModal = () => {
+    setIsLoginModalOpen(true);
+  };
+
+  const closeLoginModal = () => {
+    setIsLoginModalOpen(false);
+  };
 
   const handleAddBlogClick = () => {
     // Navigate to "/add_blog" when the "add Blog" button is clicked
     navigate("/add_blog");
-  };
-
-  const openLoginModal = () => {
-    setIsLoginModalOpen(true);
   };
 
   useEffect(() => {
@@ -79,6 +88,11 @@ const BlogDetails = () => {
           </button>
         )}
       </div>
+      <LoginModal isOpen={isLoginModalOpen} onClose={closeLoginModal} />
+      <div className="flex justify-between items-center mt-20 w-11/12 border-b mx-auto ">
+            <p className="font-bold text-6xl text-black"> ბლოგი </p>
+            <img src={blogImage} alt="Blog" />
+          </div>
       </header>
 
 
