@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import Header from "./Header";
 import { useParams } from "react-router-dom";
 import { fetchData } from "../api/fetchData"; // Adjust the import path
+import SimilarComponents from "./SimilarComponents";
 
 const BlogDetails = () => {
   const { id } = useParams();
@@ -92,7 +93,7 @@ const BlogDetails = () => {
       </div>
 
 
-  
+  <SimilarComponents />
     </>
   );
 };

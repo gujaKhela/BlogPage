@@ -96,3 +96,25 @@
 .border-red-500 {
   border-color: #ef4444; /* Adjust the color as needed */
 }
+
+
+/* Add this CSS to your stylesheet or styled component */
+
+.arrow.next {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: #E4E3EB
+  ; /* Add your preferred background color */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Add a smooth transition effect */
+
+  /* Optional: Add box-shadow or other styles for a more distinct appearance */
+}
+
+.arrow.next:hover {
+  background-color: #5D37F3 ; /* Change to the color you want on hover */
+}
