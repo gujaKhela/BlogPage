@@ -1,15 +1,11 @@
 import React, { useEffect } from "react";
-import AllRoutes from "./routes/allROutes";
+import AllRoutes from "./routes/AllRoutes";
 import "./App.css";
 
 function App() {
-
-
   return (
     <div>
-      
-        <AllRoutes />
-  
+      <AllRoutes />
     </div>
   );
 }

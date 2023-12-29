@@ -8,24 +8,44 @@ import { Card } from "flowbite-react";
 import trimTextToWords from "./TextTrim";
 // import Card from "./YourCard"; // Make sure to import the correct card component
 
-
-
-
-const YourSliderComponent = ({ isHomePageLookLike, isBlogPage, }) => {
+const YourSliderComponent = ({
+  isHomePageLookLike,
+  isBlogPage,
+  categoryId,
+}) => {
   const [blogs, setBlogs] = useState([]);
+  const [categoriesId, setCategoriesId] = useState([]);
+
+  useEffect(() => {
+    // Extract category IDs from the array of categories
+    const categoryIds = categoryId.map((category) => category.id);
+    console.log("categoriesId:", categoryIds);
+    setCategoriesId(categoryIds);
+  }, [categoryId]);
 
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const fetchedBlogs = await fetchData();
-        setBlogs(fetchedBlogs);
+        const allBlogs = await fetchData();
+        console.log("All Blogs:", allBlogs);
+  
+        // Filter blogs based on category IDs
+        const filteredBlogs = allBlogs.filter((blog) =>
+          blog.categories.some((category) =>
+            categoriesId.includes(category.id)
+          )
+        );
+  
+        console.log("Filtered Blogs:", filteredBlogs);
+        setBlogs(filteredBlogs);
       } catch (error) {
         console.error("Error fetching blogs:", error);
       }
     };
-
+  
     fetchBlogs();
-  }, []);
+  }, [categoriesId]);
+  
 
   const settings = {
     dots: false,
@@ -43,59 +63,61 @@ const YourSliderComponent = ({ isHomePageLookLike, isBlogPage, }) => {
     <Slider {...settings}>
       {blogs.map((blog) => (
         <div key={blog.id}>
+          {" "}
           <div className="card-container">
             {/* Your card component goes here */}
 
             <div key={blog.id} className="card-container">
-              <Card className={cardClassName}>
+              <div className="my-12">
                 <img
-                  className="w-full h-40 object-cover"
+                  className="object-cover w-[408px] h-[328px] rounded-lg"
                   src={blog.image}
                   alt={blog.alt}
-                  style={{ maxHeight: "200px" }} 
                 />
-                <p className="text-[16px] leading-[20px] text-start">
+                <p className="text-[16px] font-bold mt-[20px]">
+                  {" "}
                   {blog.author}
                 </p>
-                <p className="font-small text-[#85858D] text-start">
-                 
-                   {blog.publish_date}`
-                    
+                <p className="text-gray-600 mt-[10px] text-xs">
+                  {blog.publish_date}
                 </p>
-                <h4 className="text-2xl font-bold tracking-tight text-gray-700 dark:text-white text-left h-16 overflow-hidden">
+                <div className="font-bold text-[20px] mt-[20px]">
                   {blog.title}
-                </h4>
-                <div className="flex justify-between pl-4 pr-4">
-                  <ul className="flex flex-wrap justify-center space-x-4 mb-4">
-                    {blog.categories.map((bl) => (
-                      <li
-                        key={bl.id}
-                        className="py-2 px-4 rounded-full m-2"
-                        style={{
-                          backgroundColor: bl.background_color,
-                          color: bl.text_color,
-                        }}
-                      >
-                        {bl.title}
-                      </li>
-                    ))}
-                  </ul>
                 </div>
-                <p className="font-normal text-start text-gray-700 dark:text-gray-400">
-                   ${trimTextToWords(blog.description, 12)}
-                    
+                <p className="font-medium text-gray-600 mt-[10px] w-[408px]">
+                  {blog.categories.map((bl) => (
+                    <span
+                      key={bl.id}
+                      className={`text-sm inline-block rounded-full px-3 py-1 mr-2 mt-1`}
+                      style={{
+                        backgroundColor: bl.background_color,
+                        color: bl.text_color,
+                      }}
+                    >
+                      {bl.title}
+                    </span>
+                  ))}
+                </p>
+                <p className="text-gray-700 text-[16px] mt-[20px] truncate">
+                  {isHomePageLookLike
+                    ? `${trimTextToWords(blog.description, 12)}`
+                    : ""}
                 </p>
                 {isHomePageLookLike && (
-                  <Link
-                    to={`/blogs/${blog.id}`}
-                    className="text-[#5D37F3] flex items-center gap-2 text-[14px]"
-                  >
-                    სრულად ნახვა
-                    <img src={Arrow} alt="Arrow" />
+                  <Link to={`/blogs/${blog.id}`}>
+                    <div className="flex items-center gap-2">
+                      <p className="text-[14px] font-bold cursor-pointer mt-[18px] text-[#5d37f3]">
+                        სრულად ნახვა
+                      </p>
+                      <img
+                        src={Arrow}
+                        className="mt-3 w-[20px] h-[18px]"
+                        alt="Arrow"
+                      />
+                    </div>
                   </Link>
                 )}
-              </Card>
-    
+              </div>
             </div>
           </div>
         </div>

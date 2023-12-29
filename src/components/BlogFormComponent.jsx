@@ -228,7 +228,7 @@ const BlogForm = () => {
   return (
     <div className="w-full justify-center flex">
       <div className="w-[720px] flex flex-col gap-4 ">
-        <p className="font-bold text-[30px] leading-[45px]">
+        <p className="font-bold text-[30px] leading-[45px] mt-20">
           {" "}
           ბლოგის დამატება{" "}
         </p>

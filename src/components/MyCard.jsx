@@ -2,10 +2,14 @@ import React, { useEffect } from "react";
 import { Card } from "flowbite-react";
 import { Link } from "react-router-dom";
 import Arrow from "../img/Arrow.svg";
-import trimTextToWords from "./TextTrim"
+import trimTextToWords from "./TextTrim";
 import { useMyArrayContext } from "../contexts/MyArrayContext";
 
-const CustomCard = ({ isHomePageLookLike = false, blogs,isBlogPage = false }) => {
+const CustomCard = ({
+  isHomePageLookLike = false,
+  blogs,
+  isBlogPage = false,
+}) => {
   const { myArray, toggleElementInMyArray } = useMyArrayContext();
 
   // Load selected categories from local storage on mount
@@ -29,67 +33,60 @@ const CustomCard = ({ isHomePageLookLike = false, blogs,isBlogPage = false }) =>
           blog.categories.some((category) => myArray.includes(category.id))
         )
       : blogs;
-
-  const cardClassName = isHomePageLookLike
-    ? "max-w-md flex-shrink-0 w-[408px] h-[620px]"
-    : "w-5/6 mx-auto my-10 w-[408px] h-[620px]";
+    
 
   return (
     <>
       {filteredBlogs.length > 0 &&
         filteredBlogs.map((blog) => (
-          <div key={blog.id} className="card-container">
-            <Card className={cardClassName}>
+          <div key={blog.id} >
+            <div className="my-12" >
               <img
-                className="w-full h-40 object-cover"
+                className="object-cover w-[408px] h-[328px] rounded-lg"
                 src={blog.image}
                 alt={blog.alt}
-                style={{ maxHeight: "200px" }} // Fixed height for the image
               />
-              <p className="text-[16px] leading-[20px] text-start">
-                {blog.author}
+              <p className="text-[16px] font-bold mt-[20px]"> {blog.author}</p>
+              <p className="text-gray-600 mt-[10px] text-xs">
+                {blog.publish_date}
               </p>
-              <p className="font-small text-[#85858D] text-start">
-                {isHomePageLookLike
-                  ? `${blog.publish_date}`
-                  : `Publication Date: ${blog.publish_date} ${"gmail@@@com"}`}
-              </p>
-              <h4 className="text-2xl font-bold tracking-tight text-gray-700 dark:text-white text-left h-16 overflow-hidden">
+              <div className="font-bold text-[20px] mt-[20px]">
                 {blog.title}
-              </h4>
-              <div className="flex justify-between pl-4 pr-4">
-                <ul className="flex flex-wrap justify-center space-x-4 mb-4">
-                  {blog.categories.map((bl) => (
-                    <li
-                      key={bl.id}
-                      className="py-2 px-4 rounded-full m-2"
-                      style={{
-                        backgroundColor: bl.background_color,
-                        color: bl.text_color,
-                      }}
-                    >
-                      {bl.title}
-                    </li>
-                  ))}
-                </ul>
               </div>
-              <p className="font-normal text-start text-gray-700 dark:text-gray-400">
+              <p className="font-medium text-gray-600 mt-[10px] w-[408px]">
+                {blog.categories.map((bl) => (
+                  <span
+                    key={bl.id}
+                    className={`text-sm inline-block rounded-full px-3 py-1 mr-2 mt-1`}
+                    style={{
+                      backgroundColor: bl.background_color,
+                      color: bl.text_color,
+                    }}
+                  >
+                    {bl.title}
+                  </span>
+                ))}
+              </p>
+              <p className="text-gray-700 text-[16px] mt-[20px] truncate">
                 {isHomePageLookLike
                   ? `${trimTextToWords(blog.description, 12)}`
                   : ""}
               </p>
               {isHomePageLookLike && (
-  <Link to={`/blogs/${blog.id}`} className="text-[#5D37F3] flex items-center gap-2 text-[14px]">
-  სრულად ნახვა
-  <img src={Arrow} alt="Arrow" />
-</Link>
+                <Link to={`/blogs/${blog.id}`}>
+                  <div className="flex items-center gap-2">
+                    <p className="text-[14px] font-bold cursor-pointer mt-[18px] text-[#5d37f3]">
+                      სრულად ნახვა
+                    </p>
+                    <img
+                      src={Arrow}
+                      className="mt-3 w-[20px] h-[18px]"
+                      alt="Arrow"
+                    />
+                  </div>
+                </Link>
               )}
-            </Card>
-            {isBlogPage && (
-              <div className="w-10/12 mx-auto ">
-                <span className=""></span>
-              </div>
-            )}
+            </div>
           </div>
         ))}
     </>

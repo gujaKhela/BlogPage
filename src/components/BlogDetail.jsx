@@ -61,29 +61,29 @@ const BlogDetails = () => {
           }}
         />
         <div style={{ marginTop: "20px" }}>
-          <p className="text-[16px] leading-[20px] text-start mt-5 font-bold">{author}</p>
+          <p className="text-[16px] leading-[20px] text-start mt-5 font-bold">
+            {author}
+          </p>
           <p className="font-small text-[#85858D] text-start mt-5">
             {" "}
             {publish_date} | tempmail@redberry.ge
           </p>
           <p className="text-2xl font-bold text-start my-5 ">{title}</p>
           <ul className="flex flex-wrap justify-center space-x-4 rounded">
-
             {categories.map((category) => (
-  
-                <li
-                  key={category.id}
-                  className="py-2 px-4 rounded-full m-2"
-                  style={{
-                    backgroundColor: category.background_color,
-                    color: category.text_color,
-                    height: "40px", // Set a fixed height
-                    display: "flex",
-                    alignItems: "center", // Align text vertically in the middle
-                  }}
-                >
-                  {category.title}
-                </li>
+              <li
+                key={category.id}
+                className="py-2 px-4 rounded-full m-2"
+                style={{
+                  backgroundColor: category.background_color,
+                  color: category.text_color,
+                  height: "40px", // Set a fixed height
+                  display: "flex",
+                  alignItems: "center", // Align text vertically in the middle
+                }}
+              >
+                {category.title}
+              </li>
             ))}
           </ul>
           <div style={{ marginTop: "20px" }} className="text-start">
@@ -92,8 +92,7 @@ const BlogDetails = () => {
         </div>
       </div>
 
-
-  <SimilarComponents />
+      <SimilarComponents categoryId={categories} />
     </>
   );
 };

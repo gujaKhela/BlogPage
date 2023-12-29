@@ -32,8 +32,8 @@ const Navbar = () => {
   }
   return (
     <div className="max-w-screen-2xl">
-      <nav className="flex items-center  max-w-fit m-20">
-        <ul className="flex flex-wrap justify-center space-x-10 rounded  ">
+      <nav className="flex items-center  max-w-fit my-5">
+        <ul className="flex flex-wrap justify-center space-x-10 rounded m-20 ">
           {categories.map((category) => (
             <button
               key={category.id}
