@@ -6,7 +6,6 @@ import Header from "../components/Header";
 import CustomCard from "../components/MyCard";
 import BlogDetails from "../components/BlogDetail";
 import ArrowBack from "../img/ArrowBack.png"
-import SimilarComponents from "../components/SimilarComponents";
 
 const Blog = () => {
   return (

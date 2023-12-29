@@ -7,7 +7,7 @@ const fetchData = async () => {
       {
         headers: {
           Authorization:
-            "Bearer a6908d2c16e194d7775c053c7343041cc52efdae11424aa4ff3748955430e93a",
+            "Bearer 9ef0d6b55a8c8bf314146b2601b506eca81d51fc1109983ae787af7af1e35c23",
         },
       }
     );

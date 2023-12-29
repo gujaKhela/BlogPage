@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { Card } from "flowbite-react";
 import { Link } from "react-router-dom";
 import Arrow from "../img/Arrow.svg";
 import trimTextToWords from "./TextTrim";
