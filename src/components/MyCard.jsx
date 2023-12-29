@@ -39,7 +39,7 @@ const CustomCard = ({
     <>
       {filteredBlogs.length > 0 &&
         filteredBlogs.map((blog) => (
-          <div key={blog.id} >
+          <div key={blog.id} className="max-w-[408px]">
             <div className="my-12" >
               <img
                 className="object-cover w-[408px] h-[328px] rounded-lg"
@@ -53,9 +53,9 @@ const CustomCard = ({
               <div className="font-bold text-[20px] mt-[20px]">
                 {blog.title}
               </div>
-              <p className="font-medium text-gray-600 mt-[10px] w-[408px]">
+              <ul className="font-medium text-gray-600 mt-[10px] w-[408px]">
                 {blog.categories.map((bl) => (
-                  <span
+                  <li
                     key={bl.id}
                     className={`text-sm inline-block rounded-full px-3 py-1 mr-2 mt-1`}
                     style={{
@@ -64,13 +64,14 @@ const CustomCard = ({
                     }}
                   >
                     {bl.title}
-                  </span>
+                  </li>
                 ))}
-              </p>
-              <p className="text-gray-700 text-[16px] mt-[20px] truncate">
-                {isHomePageLookLike
-                  ? `${trimTextToWords(blog.description, 12)}`
-                  : ""}
+              </ul>
+              <p className="text-[#404049
+] text-[16px] mt-[20px] truncate">
+                
+                  {trimTextToWords(blog.description, 10)}
+                  
               </p>
               {isHomePageLookLike && (
                 <Link to={`/blogs/${blog.id}`}>
