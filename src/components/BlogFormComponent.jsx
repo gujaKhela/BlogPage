@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 
 const API_URL = "https://api.blog.redberryinternship.ge/api";
@@ -26,6 +27,7 @@ const BlogForm = () => {
   const [isDescriptionValid, setIsDescriptionValid] = useState(true);
 
   const [forceUpdate, setForceUpdate] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const [isCategoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
   const [formData, setFormData] = useState(() => {
@@ -202,6 +204,7 @@ const BlogForm = () => {
 
       // Clear validation errors
       setValidationErrors({});
+      setIsSuccess(true);
 
       // Handle successful response or perform any other actions
     } catch (error) {
@@ -472,6 +475,13 @@ const BlogForm = () => {
               გამოქვეყნება
             </button>
           </div>
+          {isSuccess && (
+            <div className="text-green-500">
+              <Link to="/">
+                <button className="my-5 p-5 m-5 bg-blue">წარმატებით დაემატა</button>
+              </Link>
+            </div>
+          )}
         </form>
       </div>
     </div>
