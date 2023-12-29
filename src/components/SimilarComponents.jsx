@@ -7,7 +7,7 @@ import YourSliderComponent from "./YourSliderComponent";
 
 const SimilarComponents = ({categoryId}) => {
   return (
-    <div className="w-11/12 ">
+    <div className="w-11/12 m-10 relative">
          <p className="text-left text-2xl font-bold my-10">მსგავსი სტატიები
          </p>
 

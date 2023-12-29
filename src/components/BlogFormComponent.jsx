@@ -3,7 +3,7 @@ import axios from "axios";
 
 const API_URL = "https://api.blog.redberryinternship.ge/api";
 const TOKEN =
-  "Bearer 9bf9e1d01445670513eb7efd8efd8a54ec810ae9a16c1dc96929f885aeeff00e";
+  "Bearer a6908d2c16e194d7775c053c7343041cc52efdae11424aa4ff3748955430e93a";
 
 const BlogForm = () => {
   const initialFormData = {
@@ -171,7 +171,6 @@ const BlogForm = () => {
       ],
     }));
     setCategoryDropdownOpen(false);
-
   };
 
   const handleSubmit = async (e) => {
@@ -391,26 +390,27 @@ const BlogForm = () => {
                       ></svg>
                     </div>
                   )}
-                {formData.selectedCategories.length > 0
-  ? formData.selectedCategories.map((categoryId) => {
-      const selectedCategory = allCategories.find(
-        (category) => category.id === categoryId
-      );
+                  {formData.selectedCategories.length > 0
+                    ? formData.selectedCategories.map((categoryId) => {
+                        const selectedCategory = allCategories.find(
+                          (category) => category.id === categoryId
+                        );
 
-      return (
-        <span
-          key={categoryId}
-          className="mr-2 inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700"
-          style={{
-            backgroundColor: selectedCategory?.background_color,
-            color: selectedCategory?.text_color,
-          }}
-        >
-          {selectedCategory ? selectedCategory.title : ''}
-        </span>
-      );
-    })
-  : "აირჩიეთ კატეგორია"}
+                        return (
+                          <span
+                            key={categoryId}
+                            className="mr-2 inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700"
+                            style={{
+                              backgroundColor:
+                                selectedCategory?.background_color,
+                              color: selectedCategory?.text_color,
+                            }}
+                          >
+                            {selectedCategory ? selectedCategory.title : ""}
+                          </span>
+                        );
+                      })
+                    : "აირჩიეთ კატეგორია"}
                 </div>
                 {isCategoryDropdownOpen && (
                   <div className="absolute mt-1 w-full rounded-md bg-white shadow-lg">
@@ -468,7 +468,6 @@ const BlogForm = () => {
             <button
               type="submit"
               className={`bg-purple-500 rounded-md text-white px-3 md:px-10 py-3`}
-              
             >
               გამოქვეყნება
             </button>

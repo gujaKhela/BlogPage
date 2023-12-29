@@ -47,13 +47,15 @@ const YourSliderComponent = ({
     }
   }, [categoriesId]);
 
+
+
   const settings = {
     dots: false,
     infinite: true,
     speed: 500,
     slidesToShow: 3, // Display three slides at a time
     slidesToScroll: 3, // Scroll three slides at a time
-    nextArrow: <SampleNextArrow  />,
+    nextArrow: <SampleNextArrow  />, // Apply inline styles here
     // Move next arrow to top right
     // prevArrow: <SamplePrevArrow />, // Custom prev arrow component
   };
