@@ -1,5 +1,7 @@
 // BlogDetails.jsx
-
+import { useAuth } from "../contexts/AuthContext";
+import { Link } from "react-router-dom";
+import logoImage from "../img/LOGO.png"
 import React, { useEffect, useState } from "react";
 import Header from "./Header";
 import { useParams } from "react-router-dom";
@@ -9,6 +11,17 @@ import SimilarComponents from "./SimilarComponents";
 const BlogDetails = () => {
   const { id } = useParams();
   const [blogDetail, setBlogDetail] = useState(null);
+  const { isLoggedIn, logout } = useAuth();
+
+
+  const handleAddBlogClick = () => {
+    // Navigate to "/add_blog" when the "add Blog" button is clicked
+    navigate("/add_blog");
+  };
+
+  const openLoginModal = () => {
+    setIsLoginModalOpen(true);
+  };
 
   useEffect(() => {
     const fetchBlogDetail = async () => {
@@ -41,7 +54,42 @@ const BlogDetails = () => {
 
   return (
     <>
-      <Header isBlogPage={true} />
+      
+
+
+      <header className="">
+      <div className="flex justify-between items-center w-11/12 mx-auto">
+        <Link to="/" className="text-2xl font-bold">
+          <img src={logoImage} alt="Logo" className="h-8" />
+        </Link>
+
+        {isLoggedIn ? (
+          <button
+            className="bg-indigo-600 text-white px-4 py-2 rounded"
+            onClick={handleAddBlogClick}
+          >
+            დაამატე ბლოგი
+          </button>
+        ) : (
+          <button
+            className="bg-indigo-600 text-white px-4 py-2 rounded"
+            onClick={openLoginModal}
+          >
+            შესვლა
+          </button>
+        )}
+      </div>
+      </header>
+
+
+
+
+
+
+
+
+
+      
       <div
         style={{
           width: "720px",

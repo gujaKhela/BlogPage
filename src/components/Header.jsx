@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import logoImage from "../../src/img/LOGO.png";
 import blogImage from "../img/Blog.png"
+import logoImage from "../../src/img/LOGO.png";
 import { useAuth } from "../contexts/AuthContext";
 import LoginModal from "./LoginModal";
 
-const Header = ({ isBlogPage = false }) => {
+const Header = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const { isLoggedIn, logout } = useAuth();
   const navigate = useNavigate(); // Use useNavigate to navigate to different routes
@@ -48,16 +48,10 @@ const Header = ({ isBlogPage = false }) => {
       </div>
 
       <LoginModal isOpen={isLoginModalOpen} onClose={closeLoginModal} />
-
-      {!isBlogPage && (
-        <>
-          <div className="flex justify-between items-center mt-20 w-11/12 border-b mx-auto ">
+      <div className="flex justify-between items-center mt-20 w-11/12 border-b mx-auto ">
             <p className="font-bold text-6xl text-black"> ბლოგი </p>
             <img src={blogImage} alt="Blog" />
           </div>
-
-        </>
-      )}
     </header>
   );
 };

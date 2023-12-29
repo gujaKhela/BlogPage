@@ -53,7 +53,8 @@ const YourSliderComponent = ({
     speed: 500,
     slidesToShow: 3, // Display three slides at a time
     slidesToScroll: 3, // Scroll three slides at a time
-    nextArrow: <SampleNextArrow />, // Use the corrected component
+    nextArrow: <SampleNextArrow style={{ position: "absolute", top: "10%", right: "5%" }} />,
+ // Move next arrow to top right
     // prevArrow: <SamplePrevArrow />, // Custom prev arrow component
   };
 
