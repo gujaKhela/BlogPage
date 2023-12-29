@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logoImage from "../../src/img/LOGO.png";
-import blogImage from "../img/blog.png"
+import blogImage from "../img/Blog.png"
 import { useAuth } from "../contexts/AuthContext";
 import LoginModal from "./LoginModal";
 

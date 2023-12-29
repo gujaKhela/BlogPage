@@ -103,20 +103,7 @@ const YourSliderComponent = ({
                     ? `${trimTextToWords(blog.description, 12)}`
                     : ""}
                 </p>
-                {isHomePageLookLike && (
-                  <Link to={`/blogs/${blog.id}`}>
-                    <div className="flex items-center gap-2">
-                      <p className="text-[14px] font-bold cursor-pointer mt-[18px] text-[#5d37f3]">
-                        სრულად ნახვა
-                      </p>
-                      <img
-                        src={Arrow}
-                        className="mt-3 w-[20px] h-[18px]"
-                        alt="Arrow"
-                      />
-                    </div>
-                  </Link>
-                )}
+             
               </div>
             </div>
           </div>
