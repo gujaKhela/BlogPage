@@ -28,24 +28,24 @@ const YourSliderComponent = ({
       try {
         const allBlogs = await fetchData();
         console.log("All Blogs:", allBlogs);
-  
+
         // Filter blogs based on category IDs
         const filteredBlogs = allBlogs.filter((blog) =>
-          blog.categories.some((category) =>
-            categoriesId.includes(category.id)
-          )
+          blog.categories.some((category) => categoriesId.includes(category.id))
         );
-  
+
         console.log("Filtered Blogs:", filteredBlogs);
         setBlogs(filteredBlogs);
       } catch (error) {
         console.error("Error fetching blogs:", error);
       }
     };
-  
-    fetchBlogs();
+
+    // Fetch blogs only when categoriesId is updated
+    if (categoriesId.length > 0) {
+      fetchBlogs();
+    }
   }, [categoriesId]);
-  
 
   const settings = {
     dots: false,
